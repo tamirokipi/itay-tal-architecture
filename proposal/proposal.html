@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הצעה עסקית — סוכן AI לכתיבת קופי | SuenoHost × Quixale</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #1a1a2e;
+            --accent: #e94560;
+            --accent-light: #ff6b81;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --text-dark: #1a1a2e;
+            --text-gray: #6c757d;
+            --text-light: #ffffff;
+            --border: #e9ecef;
+            --success: #28a745;
+            --gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            color: var(--text-dark);
+            background: var(--bg-light);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .page {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--bg-white);
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+        }
+
+        /* Header */
+        .header {
+            background: var(--gradient);
+            color: var(--text-light);
+            padding: 50px 60px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(ellipse, rgba(233,69,96,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-area h2 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo-area .tagline {
+            font-size: 12px;
+            opacity: 0.7;
+            font-weight: 300;
+            margin-top: 2px;
+        }
+
+        .header-meta {
+            text-align: left;
+            font-size: 13px;
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+
+        .header-title {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-title h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .header-title .subtitle {
+            font-size: 16px;
+            font-weight: 300;
+            opacity: 0.85;
+        }
+
+        .header-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        /* Content */
+        .content {
+            padding: 50px 60px;
+        }
+
+        .section {
+            margin-bottom: 45px;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--accent);
+            display: inline-block;
+            break-after: avoid;
+            page-break-after: avoid;
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 700;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        /* Problem Section */
+        .problem-box {
+            background: #fff5f5;
+            border-right: 4px solid var(--accent);
+            padding: 25px 30px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .problem-box p {
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .problem-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            break-inside: avoid;
+        }
+
+        .stat-card .number {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-top: 5px;
+        }
+
+        /* Features */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .feature-card {
+            display: flex;
+            gap: 16px;
+            padding: 20px 24px;
+            background: var(--bg-light);
+            border-radius: 10px;
+            align-items: flex-start;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .feature-icon {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .feature-content h4 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--primary);
+        }
+
+        .feature-content p {
+            font-size: 13px;
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        /* Demo Section */
+        .demo-box {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 28px 30px;
+            margin-top: 20px;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .demo-label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-bottom: 18px;
+            text-transform: uppercase;
+        }
+
+        .demo-pair {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .demo-pair:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .demo-zone {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .demo-before {
+            font-size: 14px;
+            color: #aaa;
+            text-decoration: line-through;
+            margin-bottom: 4px;
+            font-weight: 300;
+        }
+
+        .demo-after {
+            font-size: 15px;
+            color: var(--text-dark);
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        /* Flow */
+        .flow {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin-top: 24px;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            position: relative;
+            padding-bottom: 28px;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .flow-step:last-child { padding-bottom: 0; }
+
+        .flow-dot-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+            width: 40px;
+        }
+
+        .flow-dot {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: rgba(233,69,96,0.1);
+            border: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .flow-line {
+            width: 2px;
+            flex: 1;
+            background: linear-gradient(to bottom, var(--accent), transparent);
+            margin-top: 6px;
+        }
+
+        .flow-content {
+            flex: 1;
+            padding-top: 6px;
+        }
+
+        .flow-content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--primary);
+        }
+
+        .flow-content p {
+            font-size: 13px;
+            color: var(--text-gray);
+            font-weight: 300;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .comparison-table thead th {
+            background: var(--primary);
+            color: white;
+            padding: 14px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .comparison-table thead th:nth-child(3) {
+            background: var(--accent);
+        }
+
+        .comparison-table tbody td {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .comparison-table tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        .comparison-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .check { color: var(--success); font-weight: 700; font-size: 16px; }
+        .cross { color: #dc3545; font-weight: 700; font-size: 16px; }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-right: 30px;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            right: 8px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+            padding-right: 30px;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            right: -26px;
+            top: 6px;
+            width: 14px;
+            height: 14px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px var(--accent);
+        }
+
+        .timeline-item .days {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 2px;
+        }
+
+        .timeline-item h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .timeline-item p {
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        /* Pricing */
+        .pricing-section {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 35px;
+            border: 2px solid var(--border);
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .pricing-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .price-box {
+            background: white;
+            border-radius: 10px;
+            padding: 24px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .price-box.highlight {
+            border: 2px solid var(--accent);
+        }
+
+        .price-box .price-label {
+            font-size: 13px;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+        }
+
+        .price-box .price-amount {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .price-box .price-amount span {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--text-gray);
+        }
+
+        .price-box .price-note {
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-top: 4px;
+        }
+
+        .pricing-details {
+            font-size: 13px;
+            color: #555;
+        }
+
+        .pricing-details h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            margin-top: 16px;
+        }
+
+        .pricing-details ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .pricing-details ul li {
+            padding: 4px 0;
+            padding-right: 20px;
+            position: relative;
+        }
+
+        .pricing-details ul li::before {
+            content: '✓';
+            position: absolute;
+            right: 0;
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .pricing-details .external-costs li::before {
+            content: '•';
+            color: var(--text-gray);
+        }
+
+        /* Quote Callout */
+        .quote-callout {
+            background: var(--bg-light);
+            border-right: 4px solid var(--accent);
+            padding: 20px 25px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #555;
+            font-size: 14px;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        /* Needs Grid */
+        .needs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .needs-card {
+            background: var(--bg-light);
+            border-radius: 10px;
+            padding: 24px;
+            border-right: 3px solid var(--primary);
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .needs-card.quixale {
+            border-right-color: var(--accent);
+        }
+
+        .needs-card h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .needs-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .needs-card li {
+            font-size: 13px;
+            color: var(--text-gray);
+            padding: 4px 0;
+            padding-right: 18px;
+            position: relative;
+        }
+
+        .needs-card li::before {
+            content: '→';
+            position: absolute;
+            right: 0;
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+        /* CTA */
+        .cta-section {
+            background: var(--gradient);
+            color: white;
+            padding: 40px 60px;
+            text-align: center;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .cta-section h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .cta-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .cta-step {
+            background: rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 20px 12px;
+        }
+
+        .cta-step .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            border-radius: 50%;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .cta-step p {
+            font-size: 13px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .cta-highlight {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-light);
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 25px 60px;
+            text-align: center;
+            background: var(--bg-light);
+            border-top: 1px solid var(--border);
+        }
+
+        .footer p {
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        .footer .brand {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Page Break Control */
+        .page-break {
+            break-before: page;
+            page-break-before: always;
+            padding-top: 10px;
+        }
+
+        @media print {
+            body { background: white; }
+            .page { box-shadow: none; max-width: 100%; }
+            .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .cta-section { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .feature-icon { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .section-number { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .stat-card { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .comparison-table thead th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .flow-dot { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .timeline-item::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .header-badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .cta-step .step-num { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .price-box.highlight { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-top">
+            <div class="logo-area">
+                <h2>QUIXALE DIGITAL</h2>
+                <div class="tagline">כלי AI מותאמים אישית שעובדים בשביל העסק שלך</div>
+            </div>
+            <div class="header-meta">
+                <div>תאריך: 26 בפברואר 2026</div>
+                <div>הוכן עבור: איתי טל — SuenoHost</div>
+                <div>בתוקף ל-14 יום</div>
+            </div>
+        </div>
+        <div class="header-title">
+            <h1>סוכן AI לכתיבת קופי<br>לדפי נחיתה באלמנטור</h1>
+            <div class="subtitle">מערכת שמקבלת שאלון אפיון וטמפלט, ומחזירה דף מוכן עם קופי ברמה של קופירייטר מקצועי — אוטומטית</div>
+            <div class="header-badge">AI Copy Agent — Landing Page Edition</div>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- Problem -->
+        <div class="section">
+            <div class="section-title"><span class="section-number">1</span> הבעיה</div>
+
+            <div class="problem-box">
+                <p>
+                    כל דף נחיתה שאתה בונה ללקוח צריך קופי מקצועי. היום אתה תלוי בקופירייטרים חיצוניים — כל אחד עם סגנון שונה, זמינות שונה, ואיכות שונה. ככל ש-SuenoHost גדל ויש יותר לקוחות שבונים דפים בבילדר, צוואר הבקבוק של הקופי רק הולך וגדל. הלקוח יושב מול דף ריק וממתין, או כותב בעצמו טקסט חלש שהורג לו את ההמרות.
+                </p>
+            </div>
+
+            <div class="problem-stats">
+                <div class="stat-card">
+                    <div class="number">₪1,500-4,000+</div>
+                    <div class="label">עלות קופירייטר לדף אחד</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">2-5 ימים</div>
+                    <div class="label">זמן המתנה לקופי</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">0</div>
+                    <div class="label">סקיילביליות</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Solution -->
+        <div class="section page-break">
+            <div class="section-title"><span class="section-number">2</span> מה אני בונה לך</div>
+
+            <p style="margin-bottom: 20px; color: #555;">
+                לא עוד AI שמייצר טקסט גנרי. סוכן קופי מבוסס מחקר עמוק — 60+ נוסחאות כותרות מוכחות, פסיכולוגיה ישראלית, וזיהוי קלישאות אוטומטי. הקופי שיוצא נשמע כמו קופירייטר מקצועי, לא כמו ChatGPT.
+            </p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <div class="feature-content">
+                        <h4>60+ נוסחאות כותרות מוכחות</h4>
+                        <p>מאגר נוסחאות שנבדקו בשטח על דפי נחיתה בעברית. לא טמפלטים גנריים — פורמולות שמייצרות המרות.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🇮🇱</div>
+                    <div class="feature-content">
+                        <h4>פסיכולוגיית הצרכן הישראלי</h4>
+                        <p>דוגרי, ספקנות, ספציפיות — הסוכן כותב בדיוק בטון שמדבר לישראלים. לא תרגום מאנגלית, עברית אמיתית.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-content">
+                        <h4>טריגרים רגשיים אוטומטיים</h4>
+                        <p>Loss Aversion, Curiosity Gap, Social Proof, FOMO — מיושמים אוטומטית לפי סוג העסק והקהל. PAS Framework בכל סקשן.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🚫</div>
+                    <div class="feature-content">
+                        <h4>Anti-AI Detection מובנה</h4>
+                        <p>13+ ביטויים אסורים, זיהוי קלישאות, בדיקות איכות אוטומטיות — 10 בדיקות לפני כל פלט. הקופי נשמע אנושי, לא רובוטי.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-content">
+                        <h4>מהשאלון לדף מוכן — שניות</h4>
+                        <p>הלקוח ממלא שאלון, הבילדר שולח API call, הסוכן מחזיר JSON מוכן — הדף עולה באלמנטור עם כל הקופי במקום. אוטומטית לגמרי.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <div class="feature-content">
+                        <h4>התאמה לכל תעשייה</h4>
+                        <p>נדל"ן, עורכי דין, קליניקות, קורסים, מסעדות, SaaS — הפרומפטים מותאמים לכל סוג עסק שלקוחות SuenoHost בונים לו דף.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="section page-break">
+            <div class="section-title"><span class="section-number">3</span> איך זה עובד</div>
+
+            <div class="flow">
+                <div class="flow-step">
+                    <div class="flow-dot-col">
+                        <div class="flow-dot">1</div>
+                        <div class="flow-line"></div>
+                    </div>
+                    <div class="flow-content">
+                        <h4>הלקוח ממלא שאלון אפיון בבילדר</h4>
+                        <p>קהל יעד, תוצאה חלומית, כאב מרכזי, חסמים, הוכחה חברתית — שאלון קצר וממוקד שמספק את כל מה שהסוכן צריך</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-dot-col">
+                        <div class="flow-dot">2</div>
+                        <div class="flow-line"></div>
+                    </div>
+                    <div class="flow-content">
+                        <h4>הבילדר שולח API call</h4>
+                        <p>שאלון + טמפלט JSON נשלחים אוטומטית לסוכן ה-AI — בלי מעורבות ידנית</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-dot-col">
+                        <div class="flow-dot">3</div>
+                        <div class="flow-line"></div>
+                    </div>
+                    <div class="flow-content">
+                        <h4>הסוכן כותב קופי מבוסס מחקר</h4>
+                        <p>מפעיל את כל הנוסחאות: PAS Framework, Loss Aversion, Dugri, Curiosity Gap. כל סקשן בדף מקבל קופי ממוקד</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-dot-col">
+                        <div class="flow-dot">4</div>
+                        <div class="flow-line"></div>
+                    </div>
+                    <div class="flow-content">
+                        <h4>10 בדיקות איכות אוטומטיות</h4>
+                        <p>אין קלישאות AI, מספרים ספציפיים, עברית טבעית, מבנה שמור, אורך מתאים — רק פלט שעובר את כל הבדיקות יוצא</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-dot-col">
+                        <div class="flow-dot">5</div>
+                    </div>
+                    <div class="flow-content">
+                        <h4>JSON מוכן חוזר לבילדר</h4>
+                        <p>הדף עולה באלמנטור אוטומטית עם כל הקופי במקום — מוכן ללייב</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo -->
+        <div class="section page-break">
+            <div class="section-title"><span class="section-number">4</span> דוגמה חיה</div>
+            <p style="margin-bottom: 16px; color: #555;">עסק נדל"ן — Hero Section. הסוכן מקבל טמפלט עם placeholders ומחזיר קופי מוכן:</p>
+
+            <div class="demo-box">
+                <div class="demo-label">Hero Section — 5 אזורי קופי</div>
+
+                <div class="demo-pair">
+                    <div class="demo-zone">BADGE — מסנן קהל יעד</div>
+                    <div class="demo-before">במיוחד ל{קהל יעד} שרוצים {תוצאה חלומית} ושנמאס להם {כאב מרכזי}</div>
+                    <div class="demo-after">במיוחד למשקיעים ורוכשי דירות שרוצים לסגור עסקה רווחית ושנמאס להם לפספס נכסים ולשלם יותר מדי</div>
+                </div>
+
+                <div class="demo-pair">
+                    <div class="demo-zone">H1 — כותרת ראשית</div>
+                    <div class="demo-before">ה{שם המוצר} שעזר/ה ללמעלה מ-{מספר}+ לייצר</div>
+                    <div class="demo-after">השיטה שעזרה ללמעלה מ-2,500+ משקיעים לסגור ברווח</div>
+                </div>
+
+                <div class="demo-pair">
+                    <div class="demo-zone">H1 ACCENT — שורת זהב</div>
+                    <div class="demo-before">{תוצאה חלומית} תוך {x יום}</div>
+                    <div class="demo-after">עסקה רווחית תוך 60 יום</div>
+                </div>
+
+                <div class="demo-pair">
+                    <div class="demo-zone">SUBTITLE — הסרת חסמים</div>
+                    <div class="demo-before">מבלי {חסם 1}, מבלי {חסם 2} ואפילו מבלי {חסם 3}</div>
+                    <div class="demo-after">מבלי לשלם מחיר מנופח, מבלי לרוץ בין דירות לא רלוונטיות ואפילו מבלי ניסיון קודם</div>
+                </div>
+
+                <div class="demo-pair">
+                    <div class="demo-zone">CTA SUB — מתחת לטופס</div>
+                    <div class="demo-before">לשיחת ייעוץ שבה אראה לך במדויק איך ל{תוצאה חלומית} מלאו את הטופס</div>
+                    <div class="demo-after">ב-15 דקות אראה לך בדיוק איך לאתר את הנכס הבא שלך ולסגור ברווח</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison -->
+        <div class="section page-break">
+            <div class="section-title"><span class="section-number">5</span> למה סוכן AI ולא ChatGPT?</div>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>יכולת</th>
+                        <th>ChatGPT / AI גנרי</th>
+                        <th>Quixale Copy Agent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>כתיבת קופי בעברית</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>60+ נוסחאות כותרות מוכחות</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>פסיכולוגיה ישראלית (דוגרי, ספקנות)</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Anti-AI Detection (13+ ביטויים אסורים)</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>10 בדיקות איכות אוטומטיות</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>אינטגרציה ישירה עם הבילדר</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>פלט JSON לאלמנטור</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>התאמה לפי תעשייה</td>
+                        <td>כל פעם מחדש</td>
+                        <td>אוטומטי לפי שאלון</td>
+                    </tr>
+                    <tr>
+                        <td>שיפור מתמיד של הפרומפטים</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓ (עדכונים חודשיים)</td>
+                    </tr>
+                    <tr>
+                        <td>תמיכה טכנית</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="quote-callout" style="margin-top: 20px;">
+                ChatGPT נותן לך טקסט. אנחנו נותנים לך קופירייטר אוטומטי שמשולב ישירות בבילדר שלך, יודע לכתוב בעברית כמו ישראלי, ומשתפר כל חודש — בלי שהלקוח שלך צריך לגעת במילה אחת.
+            </div>
+        </div>
+
+        <!-- Pricing -->
+        <div class="section page-break">
+            <div class="section-title"><span class="section-number">6</span> עלות השקעה</div>
+
+            <div class="pricing-section">
+                <div class="pricing-main">
+                    <div class="price-box highlight">
+                        <div class="price-label">הטמעה (חד-פעמי)</div>
+                        <div class="price-amount">₪3,000</div>
+                        <div class="price-note">ניתן לחלק ל-4 תשלומים של ₪750</div>
+                    </div>
+                    <div class="price-box">
+                        <div class="price-label">ריטיינר חודשי</div>
+                        <div class="price-amount">₪500<span>/חודש</span></div>
+                        <div class="price-note">חודש ראשון מתנה — תשלום מהחודש השני</div>
+                    </div>
+                </div>
+
+                <div class="pricing-details">
+                    <h4>ההטמעה כוללת:</h4>
+                    <ul>
+                        <li>פיתוח סוכן ה-AI עם כל מאגר הנוסחאות והמחקר</li>
+                        <li>חיבור API מלא לבילדר הקיים</li>
+                        <li>התאמת פרומפטים למגוון תעשיות</li>
+                        <li>בדיקות end-to-end ו-QA</li>
+                        <li>3 סבבי תיקונים</li>
+                    </ul>
+
+                    <h4>הריטיינר החודשי כולל:</h4>
+                    <ul>
+                        <li>גישה ל-API ללא הגבלת קריאות</li>
+                        <li>עדכון פרומפטים ושיפור איכות שוטף</li>
+                        <li>אופטימיזציה שוטפת לביצועי הקופי</li>
+                        <li>הוספת סקשנים חדשים (features, testimonials, FAQ)</li>
+                        <li>2 פגישות של 45 דקות בחודש</li>
+                        <li>תמיכה טכנית</li>
+                        <li>אחריות וביטוח מלא על תפקוד המערכת</li>
+                    </ul>
+
+                    <h4>תנאי תשלום:</h4>
+                    <ul class="external-costs">
+                        <li>₪3,000 הטמעה — ניתן לחלק ל-4 תשלומים של ₪750</li>
+                        <li>₪500/חודש ריטיינר — החודש הראשון מתנה, תשלום מהחודש השני</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Responsibility -->
+        <div class="section">
+            <div class="section-title"><span class="section-number">7</span> חלוקת אחריות</div>
+
+            <div class="needs-grid">
+                <div class="needs-card">
+                    <h3>🛠️ מצד SuenoHost</h3>
+                    <ul>
+                        <li>פלאגין/API שמקבל JSON ומחזיר JSON</li>
+                        <li>שאלון אפיון בממשק הבילדר</li>
+                        <li>טמפלטים עם פורמט {placeholder}</li>
+                        <li>אינטגרציה עם אלמנטור (הזרקה אוטומטית)</li>
+                    </ul>
+                </div>
+                <div class="needs-card quixale">
+                    <h3>🧠 מצד Quixale</h3>
+                    <ul>
+                        <li>סוכן AI עם ידע קופי מעמיק</li>
+                        <li>API endpoint (webhook)</li>
+                        <li>בדיקות איכות אוטומטיות</li>
+                        <li>תחזוקה ועדכונים שוטפים</li>
+                    </ul>
+                </div>
+            </div>
+
+            <p style="margin-top: 16px; font-size: 14px; color: #555;">
+                <strong>האינטגרציה פשוטה:</strong> אנחנו מספקים API key, הפלאגין שלך שולח POST ומקבל JSON מוכן. ללא תלות בצד שלנו מעבר ל-API.
+            </p>
+        </div>
+
+        <!-- Timeline -->
+        <div class="section page-break">
+            <div class="section-title"><span class="section-number">8</span> לוח זמנים</div>
+
+            <p style="margin-bottom: 20px; font-weight: 600;">3 שבועות מאישור ועד שהמערכת חיה.</p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="days">שבוע 1</div>
+                    <h4>הגדרת API + אינטגרציה</h4>
+                    <p>חיבור הפלאגין, הגדרת פורמט JSON, בניית סוכן ה-AI עם כל מאגר הנוסחאות</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="days">שבוע 2</div>
+                    <h4>בדיקות + התאמות</h4>
+                    <p>QA על מגוון תעשיות (נדל"ן, עורכי דין, קליניקות, קורסים), כיוונון פרומפטים, תיקונים</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="days">שבוע 3</div>
+                    <h4>לייב + הדרכה</h4>
+                    <p>שחרור לפרודקשן, הרצה על לקוחות אמיתיים, כיוונון אחרון, שיחת סיכום</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROI -->
+        <div class="section">
+            <div class="section-title"><span class="section-number">9</span> החזר השקעה</div>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>מדד</th>
+                        <th>לפני (קופירייטר)</th>
+                        <th>אחרי (AI Agent)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>עלות קופי לדף נחיתה</td>
+                        <td style="color: #dc3545; font-weight: 600;">₪1,500-4,000+</td>
+                        <td style="color: var(--success); font-weight: 600;">₪0 (כלול במנוי)</td>
+                    </tr>
+                    <tr>
+                        <td>זמן המתנה לקופי</td>
+                        <td style="color: #dc3545; font-weight: 600;">2-5 ימי עבודה</td>
+                        <td style="color: var(--success); font-weight: 600;">שניות</td>
+                    </tr>
+                    <tr>
+                        <td>עקביות איכות</td>
+                        <td style="color: #dc3545; font-weight: 600;">תלוי בקופירייטר</td>
+                        <td style="color: var(--success); font-weight: 600;">100% עקבי</td>
+                    </tr>
+                    <tr>
+                        <td>סקיילביליות</td>
+                        <td style="color: #dc3545; font-weight: 600;">לינארי (עוד קופירייטר = עוד עלות)</td>
+                        <td style="color: var(--success); font-weight: 600;">אינסופי (אותו מנוי)</td>
+                    </tr>
+                    <tr>
+                        <td>חוויית הלקוח</td>
+                        <td style="color: #dc3545; font-weight: 600;">ממלא שאלון, מחכה ימים</td>
+                        <td style="color: var(--success); font-weight: 600;">ממלא שאלון, מקבל דף מוכן מיידית</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="quote-callout" style="margin-top: 20px;">
+                <strong>החשבון:</strong> אם לקוח SuenoHost בונה 5 דפי נחיתה בשנה, הוא חוסך ₪7,500-20,000 על קופירייטרים. הפיצ'ר הזה לבד יכול להפוך לסיבה שלקוחות בוחרים ב-SuenoHost ולא במתחרים — ולהפוך מלקוחות אחסון ללקוחות בילדר שמשלמים יותר.
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+        <h2>מה השלב הבא?</h2>
+
+        <div class="cta-steps">
+            <div class="cta-step">
+                <div class="step-num">1</div>
+                <p>אישור בווטסאפ<br>או בטלפון</p>
+            </div>
+            <div class="cta-step">
+                <div class="step-num">2</div>
+                <p>תשלום ב-4<br>תשלומים</p>
+            </div>
+            <div class="cta-step">
+                <div class="step-num">3</div>
+                <p>שיחת Kickoff<br>(שעה, לסגור פרטים טכניים)</p>
+            </div>
+            <div class="cta-step">
+                <div class="step-num">4</div>
+                <p>המערכת חיה<br>תוך 3 שבועות</p>
+            </div>
+        </div>
+
+        <div class="cta-highlight">אפשר להתחיל כבר השבוע.</div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p><span class="brand">Quixale Digital</span> — כלי AI מותאמים אישית שעובדים בשביל העסק שלך</p>
+        <p>תמיר פנר · support@quixaledigital.com</p>
+        <p style="margin-top: 8px; font-size: 11px; color: #aaa;">הצעה זו חסויה ומיועדת ל-SuenoHost בלבד</p>
+    </div>
+
+</div>
+
+</body>
+</html>

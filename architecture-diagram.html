@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SuenoHost × Quixale — ארכיטקטורת מערכת</title>
+<style>
+  /* ═══ FONTS ═══ */
+  @font-face { font-family: 'Discovery'; src: url('fonts/Discovery_Fs-Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
+  @font-face { font-family: 'Discovery'; src: url('fonts/Discovery_Fs-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Discovery'; src: url('fonts/Discovery_Fs-Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+  @font-face { font-family: 'Discovery'; src: url('fonts/Discovery_Fs-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+  @font-face { font-family: 'Discovery'; src: url('fonts/Discovery_Fs-Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+
+  /* ═══ RESET ═══ */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a12;
+    --surface: #111119;
+    --surface-2: #181822;
+    --border: rgba(255,255,255,0.06);
+    --text: #eeeef4;
+    --text-dim: rgba(255,255,255,0.50);
+    --text-dimmer: rgba(255,255,255,0.30);
+    --accent: #c8ff00;
+    --accent-dim: rgba(200,255,0,0.12);
+    --blue: #4da6ff;
+    --blue-dim: rgba(77,166,255,0.10);
+    --purple: #b07aff;
+    --purple-dim: rgba(176,122,255,0.10);
+    --orange: #ff9f43;
+    --orange-dim: rgba(255,159,67,0.10);
+    --green: #2dd4bf;
+    --green-dim: rgba(45,212,191,0.10);
+    --sueno: #6c5ce7;
+    --sueno-dim: rgba(108,92,231,0.10);
+    --wp: #21759b;
+    --wp-dim: rgba(33,117,155,0.10);
+  }
+
+  body {
+    font-family: 'Discovery', 'Heebo', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ═══ HEADER ═══ */
+  .header {
+    text-align: center;
+    padding: 72px 24px 48px;
+    position: relative;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(200,255,0,0.2);
+    padding: 6px 20px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+  .header h1 {
+    font-size: clamp(2.4rem, 6vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .header h1 span { color: var(--accent); }
+  .header p {
+    font-size: 1.15rem;
+    color: var(--text-dim);
+    max-width: 680px;
+    margin: 0 auto;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* ═══ CONTAINER ═══ */
+  .container {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 40px 28px 80px;
+  }
+
+  /* ═══ SECTION TITLES ═══ */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 56px 0 12px;
+  }
+  .section-num {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .section-title h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  .section-desc {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    font-weight: 300;
+    margin-bottom: 20px;
+    padding-right: 50px;
+    line-height: 1.7;
+  }
+
+  /* ═══ LAYERS ═══ */
+  .layer {
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 32px 28px;
+    margin-bottom: 0;
+    position: relative;
+  }
+  .layer-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .layer-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .layer-label svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+  }
+
+  .layer--sueno { background: var(--sueno-dim); border-color: rgba(108,92,231,0.18); }
+  .layer--sueno .layer-label { color: var(--sueno); }
+
+  .layer--quixale { background: var(--accent-dim); border-color: rgba(200,255,0,0.18); box-shadow: 0 0 80px rgba(200,255,0,0.03); }
+  .layer--quixale .layer-label { color: var(--accent); }
+
+  .layer--wp { background: var(--wp-dim); border-color: rgba(33,117,155,0.18); }
+  .layer--wp .layer-label { color: var(--wp); }
+
+  .layer--output { background: var(--green-dim); border-color: rgba(45,212,191,0.18); }
+  .layer--output .layer-label { color: var(--green); }
+
+  .layer__title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .layer__sub {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    font-weight: 300;
+    margin-bottom: 20px;
+  }
+
+  /* ═══ CARDS GRID ═══ */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .card {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .card__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .card__icon svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .card h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .card p {
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+  .card .tag {
+    display: inline-block;
+    font-size: 0.6rem;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-weight: 500;
+    margin-top: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ═══ ARROWS ═══ */
+  .arrow-down {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 0;
+  }
+  .arrow-line {
+    width: 1px;
+    height: 28px;
+    border-radius: 1px;
+  }
+  .arrow-head {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+  }
+  .arrow-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin: 4px 0;
+  }
+
+  .arrow--sueno .arrow-line { background: var(--sueno); }
+  .arrow--sueno .arrow-head { border-top: 7px solid var(--sueno); }
+  .arrow--sueno .arrow-label { color: var(--sueno); background: var(--sueno-dim); }
+
+  .arrow--accent .arrow-line { background: var(--accent); }
+  .arrow--accent .arrow-head { border-top: 7px solid var(--accent); }
+  .arrow--accent .arrow-label { color: var(--accent); background: var(--accent-dim); }
+
+  .arrow--green .arrow-line { background: var(--green); }
+  .arrow--green .arrow-head { border-top: 7px solid var(--green); }
+  .arrow--green .arrow-label { color: var(--green); background: var(--green-dim); }
+
+  /* ═══ PIPELINE ═══ */
+  .pipeline { display: flex; flex-direction: column; }
+  .pipe-step {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    position: relative;
+    padding-bottom: 22px;
+  }
+  .pipe-step::before {
+    content: '';
+    position: absolute;
+    right: 21px;
+    top: 44px;
+    bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+  .pipe-step:last-child::before { display: none; }
+  .pipe-step:last-child { padding-bottom: 0; }
+
+  .pipe-num {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .pipe-body { flex: 1; padding-top: 6px; }
+  .pipe-body strong {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .pipe-body p {
+    font-size: 0.92rem;
+    color: var(--text-dim);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* Data preview cards (replaces JSON blocks) */
+  .data-preview {
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin: 14px 0 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 24px;
+  }
+  .data-preview.single-col {
+    grid-template-columns: 1fr;
+  }
+  .data-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-size: 0.88rem;
+  }
+  .data-row:last-child { border-bottom: none; }
+  .data-key {
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    min-width: 80px;
+  }
+  .data-val {
+    color: var(--text-dim);
+    font-weight: 300;
+  }
+  .data-note {
+    grid-column: 1 / -1;
+    font-size: 0.8rem;
+    color: var(--text-dimmer);
+    font-weight: 300;
+    font-style: italic;
+    padding-top: 6px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ═══ AGENTS ═══ */
+  .agents-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .agent {
+    border-radius: 16px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .agent--copy { background: var(--purple-dim); border: 1px solid rgba(176,122,255,0.18); }
+  .agent--design { background: var(--blue-dim); border: 1px solid rgba(77,166,255,0.18); }
+
+  .agent__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+  .agent__icon svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .agent__name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .agent__role {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-weight: 300;
+    margin-bottom: 16px;
+  }
+  .agent__list {
+    list-style: none;
+    font-size: 0.92rem;
+  }
+  .agent__list li {
+    padding: 5px 0;
+    padding-right: 18px;
+    position: relative;
+    color: var(--text-dim);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+  .agent__list li::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 12px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
+  .agent--copy .agent__list li::before { background: var(--purple); }
+  .agent--design .agent__list li::before { background: var(--blue); }
+
+  .agent .tag {
+    display: inline-block;
+    font-size: 0.6rem;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    margin-top: 12px;
+    letter-spacing: 0.05em;
+    font-family: 'Courier New', monospace;
+    direction: ltr;
+  }
+
+  /* ═══ COMPARE TABLE ═══ */
+  .compare {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    margin: 16px 0;
+  }
+  .compare th {
+    text-align: start;
+    padding: 12px 16px;
+    font-weight: 700;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  .compare td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    color: var(--text-dim);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+  .compare .old { color: #ff6b6b; }
+  .compare .new { color: var(--green); }
+
+  /* ═══ LOOP CARD ═══ */
+  .loop {
+    background: var(--orange-dim);
+    border: 1px solid rgba(255,159,67,0.18);
+    border-radius: 16px;
+    padding: 28px 24px;
+  }
+  .loop__title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--orange);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .loop__title svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--orange);
+    fill: none;
+  }
+  .loop__sub {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-weight: 300;
+    margin-bottom: 16px;
+  }
+  .loop__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .loop__example {
+    background: rgba(0,0,0,0.25);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .loop__msg {
+    font-size: 0.95rem;
+    color: var(--orange);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .loop__action {
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  /* ═══ DATA TABLE ═══ */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    margin: 16px 0;
+  }
+  .data-table th {
+    text-align: start;
+    padding: 12px 16px;
+    font-weight: 700;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dimmer);
+  }
+  .data-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-weight: 300;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .data-table td strong { font-weight: 700; color: var(--text); }
+  .data-table code {
+    font-family: 'Courier New', monospace;
+    font-size: 0.68rem;
+    background: rgba(200,255,0,0.06);
+    color: var(--accent);
+    padding: 2px 8px;
+    border-radius: 4px;
+    direction: ltr;
+    unicode-bidi: embed;
+  }
+
+  /* ═══ FOOTER ═══ */
+  .footer {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-dimmer);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+  }
+
+  /* ═══ RESPONSIVE ═══ */
+  @media (max-width: 768px) {
+    .header { padding: 48px 16px 36px; }
+    .header h1 { font-size: 1.7rem; }
+    .container { padding: 32px 16px 64px; }
+    .agents-grid, .loop__grid, .cards { grid-template-columns: 1fr; }
+    .layer { padding: 22px 16px; }
+    .section-desc { padding-right: 0; }
+    .pipe-step { gap: 12px; }
+    .pipe-num { width: 36px; height: 36px; font-size: 0.8rem; }
+    .compare th, .compare td,
+    .data-table th, .data-table td { padding: 8px 10px; font-size: 0.72rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<div class="header">
+  <div class="badge">SYSTEM ARCHITECTURE V2</div>
+  <h1>SuenoHost × Quixale<br><span>ארכיטקטורת מערכת</span></h1>
+  <p>איך הפלאגין של איתי, סוכן הקופי (AGI-Copy), וסוכן העיצוב (AGI-Design) עובדים ביחד כדי להעלות דפי נחיתה מקצועיים ישר לוורדפרס של הלקוח</p>
+</div>
+
+<div class="container">
+
+<!-- ═══ SECTION 1: THE REAL FLOW ═══ -->
+<div class="section-title">
+  <div class="section-num" style="background: var(--sueno-dim); color: var(--sueno);">1</div>
+  <h2>הזרימה — מלקוח לדף חי</h2>
+</div>
+<p class="section-desc">הלקוח של איתי לא יודע שיש AI מאחורי הקלעים. הוא פשוט משתמש בפלאגין בוורדפרס שלו ומקבל דף נחיתה מוכן.</p>
+
+<!-- LAYER 1: SUENOHOST -->
+<div class="layer layer--sueno">
+  <div class="layer-label">
+    <svg viewBox="0 0 24 24" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+    תשתית SuenoHost
+  </div>
+  <div class="layer__title">SuenoHost — אחסון ופלאגין</div>
+  <div class="layer__sub">315+ לקוחות · אחסון וורדפרס מנוהל · הפלאגין הוא הממשק היחיד של הלקוח</div>
+  <div class="cards">
+    <div class="card">
+      <div class="card__icon" style="background: var(--sueno-dim);">
+        <svg viewBox="0 0 24 24" stroke="var(--sueno)"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+      </div>
+      <h4>שרת אחסון</h4>
+      <p>וורדפרס מותקן אוטומטית תוך 60 שניות. SSL, גיבויים, הגנת DDoS — הכל כלול.</p>
+    </div>
+    <div class="card">
+      <div class="card__icon" style="background: var(--sueno-dim);">
+        <svg viewBox="0 0 24 24" stroke="var(--sueno)"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      </div>
+      <h4>פלאגין Builder</h4>
+      <p>התוסף של איתי שמגיע עם כל חבילת אחסון. <strong>זה הממשק של הלקוח</strong> — הוא לא רואה שום דבר אחר.</p>
+      <div class="tag" style="background: var(--sueno-dim); color: var(--sueno);">WordPress Plugin</div>
+    </div>
+    <div class="card">
+      <div class="card__icon" style="background: var(--sueno-dim);">
+        <svg viewBox="0 0 24 24" stroke="var(--sueno)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <h4>שאלון בריף</h4>
+      <p>הלקוח ממלא בתוך הפלאגין: תחום, קהל יעד, כאבים, תוצאה חלומית, שירותים, סגנון.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Arrow -->
+<div class="arrow-down arrow--sueno">
+  <div class="arrow-line"></div>
+  <div class="arrow-label">API REQUEST — שאלון + הגדרות</div>
+  <div class="arrow-line"></div>
+  <div class="arrow-head"></div>
+</div>
+
+<!-- LAYER 2: QUIXALE AI -->
+<div class="layer layer--quixale">
+  <div class="layer-label">
+    <svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M20 12a8 8 0 0 0-8-8v8h8z" opacity="0.5"/></svg>
+    מנוע Quixale AI
+  </div>
+  <div class="layer__title">Quixale — פייפליין סדרתי</div>
+  <div class="layer__sub">FastAPI שמקבל את הבריף ומפעיל 4 שלבים — קופי קודם, עיצוב אחר כך, בלי אינטגרציה נפרדת</div>
+
+  <div class="pipeline">
+    <!-- Step 1 -->
+    <div class="pipe-step">
+      <div class="pipe-num" style="background: var(--accent-dim); color: var(--accent);">1</div>
+      <div class="pipe-body">
+        <strong>פענוח הבריף</strong>
+        <p>קריאה מהירה — לוקח את מה שהלקוח מילא ומייצר JSON מובנה: תחום, קהל, כאבים, שירותים, טון. אם חסר מידע — שולח שאלות חזרה לפלאגין.</p>
+        <div class="data-preview">
+          <div class="data-row"><span class="data-key">עסק</span><span class="data-val">מספרה בתל אביב</span></div>
+          <div class="data-row"><span class="data-key">תחום</span><span class="data-val">ספרות גברים</span></div>
+          <div class="data-row"><span class="data-key">קהל יעד</span><span class="data-val">גברים 20-45</span></div>
+          <div class="data-row"><span class="data-key">טון</span><span class="data-val">גברי, מקצועי</span></div>
+          <div class="data-row"><span class="data-key">כאבים</span><span class="data-val">מספרות יקרות, תורים ארוכים</span></div>
+          <div class="data-row"><span class="data-key">שירותים</span><span class="data-val">תספורות, עיצוב זקן</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="pipe-step">
+      <div class="pipe-num" style="background: var(--purple-dim); color: var(--purple);">2</div>
+      <div class="pipe-body">
+        <strong style="color: var(--purple);">AGI-Copy — כתיבה שיווקית</strong>
+        <p>הסוכן כותב את כל הקופי: כותרות (60+ נוסחאות), גוף (PAS), כאבים, שירותים, המלצות, FAQ, CTAs. כל טקסט עובר 10+ בדיקות: אנטי-AI, עברית טבעית, מספרים ספציפיים.</p>
+        <div class="data-preview single-col">
+          <div class="data-row"><span class="data-key">כותרת ראשית</span><span class="data-val">"התספורת שתגרום להם לשאול איפה היית"</span></div>
+          <div class="data-row"><span class="data-key">תת-כותרת</span><span class="data-val">"מספרה לגברים בלב ת"א. 15 דקות הרשמה, 0 המתנה."</span></div>
+          <div class="data-row"><span class="data-key">כפתור CTA</span><span class="data-val">"קבע תור עכשיו"</span></div>
+          <div class="data-note">+ נקודות כאב, שירותים, המלצות, FAQ — כל 14 הסקשנים</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="pipe-step">
+      <div class="pipe-num" style="background: var(--blue-dim); color: var(--blue);">3</div>
+      <div class="pipe-body">
+        <strong style="color: var(--blue);">AGI-Design — עיצוב ופיתוח</strong>
+        <p>מקבל את הקופי המוכן + הבריף ובונה דף HTML מלא: layout, צבעים, טיפוגרפיה, responsive, אנימציות. <strong>הקופי כבר בפנים</strong> — אין שלב שילוב נפרד.</p>
+        <div class="data-preview single-col">
+          <div class="data-row"><span class="data-key">פלט</span><span class="data-val">קובץ HTML מלא, מוכן לפרודקשן</span></div>
+          <div class="data-row"><span class="data-key">כולל</span><span class="data-val">CSS רספונסיבי, אנימציות, RTL מלא</span></div>
+          <div class="data-row"><span class="data-key">סקשנים</span><span class="data-val">14 סקשנים עם הקופי האמיתי בפנים</span></div>
+          <div class="data-note">הקופי כבר משולב — אין שלב אינטגרציה נפרד</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="pipe-step">
+      <div class="pipe-num" style="background: var(--orange-dim); color: var(--orange);">4</div>
+      <div class="pipe-body">
+        <strong style="color: var(--orange);">בקרת איכות</strong>
+        <p>בודק: responsive? כל 14 הסקשנים קיימים? RTL תקין? קופי עבר בדיקות? ביצועים? אם נכשל — חוזר לשלב 3 עם הוראות תיקון ספציפיות.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Arrow -->
+<div class="arrow-down arrow--accent">
+  <div class="arrow-line"></div>
+  <div class="arrow-label">RESPONSE — HTML מוכן לפרודקשן</div>
+  <div class="arrow-line"></div>
+  <div class="arrow-head"></div>
+</div>
+
+<!-- LAYER 3: WORDPRESS -->
+<div class="layer layer--wp">
+  <div class="layer-label">
+    <svg viewBox="0 0 24 24" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+    העלאה לוורדפרס
+  </div>
+  <div class="layer__title">WordPress — העלאה אוטומטית</div>
+  <div class="layer__sub">הפלאגין מקבל HTML מוכן ומעלה אותו כדף בוורדפרס של הלקוח</div>
+  <div class="cards">
+    <div class="card">
+      <div class="card__icon" style="background: var(--wp-dim);">
+        <svg viewBox="0 0 24 24" stroke="var(--wp)"><polyline points="22 12 16 12 14 15 10 9 8 12 2 12"/></svg>
+      </div>
+      <h4>קבלת HTML</h4>
+      <p>הפלאגין מקבל את ה-HTML המלא מה-API של Quixale.</p>
+    </div>
+    <div class="card">
+      <div class="card__icon" style="background: var(--wp-dim);">
+        <svg viewBox="0 0 24 24" stroke="var(--wp)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <h4>יצירת דף WP</h4>
+      <p>WordPress Page חדש עם Custom HTML Block. הדף נוצר אוטומטית דרך REST API.</p>
+      <div class="tag" style="background: var(--wp-dim); color: var(--wp);">WordPress REST API</div>
+    </div>
+    <div class="card">
+      <div class="card__icon" style="background: var(--wp-dim);">
+        <svg viewBox="0 0 24 24" stroke="var(--wp)"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <h4>דף חי</h4>
+      <p>הדף עולה ישר על השרת של SuenoHost. הלקוח מקבל לינק, הדף מוכן לתנועה.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Arrow -->
+<div class="arrow-down arrow--green">
+  <div class="arrow-line"></div>
+  <div class="arrow-label">הדף חי על SuenoHost</div>
+  <div class="arrow-line"></div>
+  <div class="arrow-head"></div>
+</div>
+
+<!-- LAYER 4: OUTPUT -->
+<div class="layer layer--output">
+  <div class="layer-label">
+    <svg viewBox="0 0 24 24" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+    פלט סופי
+  </div>
+  <div class="layer__title">דף נחיתה מוכן</div>
+  <div class="layer__sub">קופי מקצועי + עיצוב מקצועי + קוד מוכן — על האחסון של הלקוח</div>
+  <div class="cards">
+    <div class="card">
+      <div class="card__icon" style="background: var(--purple-dim);">
+        <svg viewBox="0 0 24 24" stroke="var(--purple)"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+      </div>
+      <h4 style="color: var(--purple);">קופי AGI-Copy</h4>
+      <p>60+ נוסחאות כותרות, PAS, פסיכולוגיה ישראלית, אנטי-AI, 10+ בדיקות איכות</p>
+    </div>
+    <div class="card">
+      <div class="card__icon" style="background: var(--blue-dim);">
+        <svg viewBox="0 0 24 24" stroke="var(--blue)"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+      </div>
+      <h4 style="color: var(--blue);">עיצוב AGI-Design</h4>
+      <p>Responsive, RTL, אנימציות, mobile-first, ביצועים מהירים, עיצוב מותאם לתחום</p>
+    </div>
+    <div class="card">
+      <div class="card__icon" style="background: var(--green-dim);">
+        <svg viewBox="0 0 24 24" stroke="var(--green)"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <h4 style="color: var(--green);">דף וורדפרס חי</h4>
+      <p>דף חי בוורדפרס של הלקוח, על האחסון של SuenoHost, מוכן לקבל תנועה</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 2: THE AGENTS ═══ -->
+<div class="section-title" style="margin-top: 64px;">
+  <div class="section-num" style="background: var(--purple-dim); color: var(--purple);">2</div>
+  <h2>הסוכנים — מי עושה מה</h2>
+</div>
+<p class="section-desc">שני סוכנים שעובדים <strong>סדרתית</strong> (לא במקביל). קופי קודם, עיצוב אחר כך. ככה אין בעיות אינטגרציה.</p>
+
+<div class="agents-grid">
+  <!-- AGI-COPY -->
+  <div class="agent agent--copy">
+    <div class="agent__icon" style="background: var(--purple-dim);">
+      <svg viewBox="0 0 24 24" stroke="var(--purple)"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+    </div>
+    <div class="agent__name" style="color: var(--purple);">AGI-Copy</div>
+    <div class="agent__role">סוכן כתיבה שיווקית</div>
+    <ul class="agent__list">
+      <li><strong>60+ נוסחאות כותרות</strong> — Dream Outcome, Curiosity Gap, מספרים ספציפיים, ועוד</li>
+      <li><strong>PAS Framework</strong> — כאב, הגברה, פתרון בכל סקשן</li>
+      <li><strong>פסיכולוגיה ישראלית</strong> — דוגרי, ספקנות, ספציפיות, Loss Aversion</li>
+      <li><strong>אנטי-AI</strong> — 13 ביטויים חסומים (מהפכני, חדשני, פתרון מושלם...)</li>
+      <li><strong>10+ בדיקות אוטומטיות</strong> — עברית טבעית, מספרים, מגדר, CTA, מבנה</li>
+      <li><strong>14 סקשנים</strong> — Hero, Pain, Emotional Break, Cards, Process, Results, Testimonials, About, FAQ, CTA, Form, Footer</li>
+    </ul>
+    <div class="tag" style="background: var(--purple-dim); color: var(--purple);">קלט: בריף JSON ← פלט: קופי JSON</div>
+  </div>
+
+  <!-- AGI-DESIGN -->
+  <div class="agent agent--design">
+    <div class="agent__icon" style="background: var(--blue-dim);">
+      <svg viewBox="0 0 24 24" stroke="var(--blue)"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+    </div>
+    <div class="agent__name" style="color: var(--blue);">AGI-Design</div>
+    <div class="agent__role">סוכן עיצוב ופיתוח</div>
+    <ul class="agent__list">
+      <li><strong>Layout מותאם לתחום</strong> — סכמת צבעים, טיפוגרפיה, ספייסינג</li>
+      <li><strong>Responsive</strong> — Mobile-first, breakpoints, viewport meta</li>
+      <li><strong>RTL מושלם</strong> — עברית, direction, unicode-bidi, פונט מקצועי</li>
+      <li><strong>HTML + CSS מוכן לפרודקשן</strong> — קוד נקי, ביצועים, נגישות</li>
+      <li><strong>14 סקשנים ויזואליים</strong> — hero, cards, carousel, FAQ accordion, forms</li>
+      <li><strong>זברה עיצובית</strong> — סקשנים כהה/בהיר לחוויית קריאה מקצועית</li>
+    </ul>
+    <div class="tag" style="background: var(--blue-dim); color: var(--blue);">קלט: בריף + קופי ← פלט: HTML מלא</div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 3: WHY SEQUENTIAL ═══ -->
+<div class="section-title" style="margin-top: 64px;">
+  <div class="section-num" style="background: var(--accent-dim); color: var(--accent);">3</div>
+  <h2>למה סדרתי ולא מקבילי?</h2>
+</div>
+
+<table class="compare">
+  <thead>
+    <tr>
+      <th style="color: #ff6b6b;">מקבילי (הדיאגרמה הישנה)</th>
+      <th style="color: var(--green);">סדרתי (הארכיטקטורה הנכונה)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="old">העיצוב נבנה בלי לדעת אורך הקופי</td>
+      <td class="new">העיצוב מקבל קופי מוכן ובונה סביבו</td>
+    </tr>
+    <tr>
+      <td class="old">הקופי נכתב בלי לדעת מגבלות עיצוב</td>
+      <td class="new">הקופי נכתב חופשי, העיצוב מתאים</td>
+    </tr>
+    <tr>
+      <td class="old">צריך שלב אינטגרציה נפרד — סיוט</td>
+      <td class="new">אין אינטגרציה — הקופי כבר בתוך ה-HTML</td>
+    </tr>
+    <tr>
+      <td class="old">כותרת 3 שורות + מקום לשורה אחת = שבור</td>
+      <td class="new">ה-layout נבנה לפי התוכן האמיתי</td>
+    </tr>
+    <tr>
+      <td class="old">יותר מסובך, יותר נקודות כשל</td>
+      <td class="new">פשוט, אמין, צפוי</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ═══ SECTION 4: EDIT LOOP ═══ -->
+<div class="section-title" style="margin-top: 64px;">
+  <div class="section-num" style="background: var(--orange-dim); color: var(--orange);">4</div>
+  <h2>לולאת עריכה — מה שהופך את זה לבילדר</h2>
+</div>
+<p class="section-desc">אחרי שהדף נוצר, הלקוח יכול לבקש שינויים דרך הפלאגין. כל עריכה = קריאה ממוקדת, לא יוצרים את כל הדף מחדש.</p>
+
+<div class="loop">
+  <div class="loop__title">
+    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    לולאת עריכה — שינויים ממוקדים
+  </div>
+  <div class="loop__sub">הלקוח מבקש שינוי דרך הפלאגין — מקבל HTML מעודכן תוך שניות</div>
+  <div class="loop__grid">
+    <div class="loop__example">
+      <div class="loop__msg">"תחליף את הכותרת"</div>
+      <div class="loop__action">AGI-Copy בלבד — כותב כותרת חדשה, מזריק ל-HTML קיים</div>
+    </div>
+    <div class="loop__example">
+      <div class="loop__msg">"תשנה צבעים לכחול"</div>
+      <div class="loop__action">AGI-Design בלבד — CSS edit, לא נוגע בקופי</div>
+    </div>
+    <div class="loop__example">
+      <div class="loop__msg">"תוסיף חלק של המלצות"</div>
+      <div class="loop__action">AGI-Copy (כותב) + AGI-Design (מעצב) — מוסיף סקשן ל-HTML</div>
+    </div>
+    <div class="loop__example">
+      <div class="loop__msg">"תשנה את הטון לנשי יותר"</div>
+      <div class="loop__action">AGI-Copy מלא — כל הקופי נכתב מחדש עם טון חדש</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 5: WP INTEGRATION ═══ -->
+<div class="section-title" style="margin-top: 64px;">
+  <div class="section-num" style="background: var(--wp-dim); color: var(--wp);">5</div>
+  <h2>אינטגרציה לוורדפרס — איך הדף עולה</h2>
+</div>
+<p class="section-desc">הפלאגין של איתי מטפל בכל הצד של וורדפרס. אנחנו רק מחזירים HTML.</p>
+
+<div class="pipeline">
+  <div class="pipe-step">
+    <div class="pipe-num" style="background: var(--wp-dim); color: var(--wp);">א</div>
+    <div class="pipe-body">
+      <strong>הפלאגין מקבל HTML</strong>
+      <p>Response מה-endpoint של Quixale עם HTML מלא + metadata (כותרת דף, תיאור, slug)</p>
+    </div>
+  </div>
+  <div class="pipe-step">
+    <div class="pipe-num" style="background: var(--wp-dim); color: var(--wp);">ב</div>
+    <div class="pipe-body">
+      <strong>יוצר דף וורדפרס</strong>
+      <p>WordPress Page חדש עם Custom HTML Block דרך REST API</p>
+      <div class="data-preview">
+        <div class="data-row"><span class="data-key">כותרת דף</span><span class="data-val">דף נחיתה — מספרה בתל אביב</span></div>
+        <div class="data-row"><span class="data-key">סטטוס</span><span class="data-val">פורסם (חי)</span></div>
+        <div class="data-row"><span class="data-key">תוכן</span><span class="data-val">HTML מלא בתוך Custom HTML Block</span></div>
+        <div class="data-row"><span class="data-key">כתובת</span><span class="data-val">domain.com/landing</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="pipe-step">
+    <div class="pipe-num" style="background: var(--wp-dim); color: var(--wp);">ג</div>
+    <div class="pipe-body">
+      <strong>דף חי</strong>
+      <p>הדף עולה ב-<code>domain.com/landing</code> על השרת של SuenoHost. הלקוח מקבל לינק, הדף מוכן לתנועה.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 6: DATA CONTRACTS ═══ -->
+<div class="section-title" style="margin-top: 64px;">
+  <div class="section-num" style="background: var(--accent-dim); color: var(--accent);">6</div>
+  <h2>חוזי נתונים — מה עובר בין כל שלב</h2>
+</div>
+<p class="section-desc">כל שלב יודע בדיוק מה הוא מקבל ומה הוא מחזיר. אין הפתעות.</p>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>מעבר</th>
+      <th>מה עובר</th>
+      <th>פורמט</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>פלאגין ← API</strong></td>
+      <td>שאלון לקוח + סוג בקשה (חדש/עריכה)</td>
+      <td><code>POST JSON</code></td>
+    </tr>
+    <tr>
+      <td><strong>API ← AGI-Copy</strong></td>
+      <td>בריף מובנה (תחום, קהל, כאבים, שירותים, טון)</td>
+      <td><code>Structured JSON</code></td>
+    </tr>
+    <tr>
+      <td><strong>AGI-Copy ← AGI-Design</strong></td>
+      <td>בריף + קופי מוכן לכל 14 סקשנים</td>
+      <td><code>Structured JSON</code></td>
+    </tr>
+    <tr>
+      <td><strong>AGI-Design ← QA</strong></td>
+      <td>HTML מלא (1,000-1,500 שורות)</td>
+      <td><code>Raw HTML</code></td>
+    </tr>
+    <tr>
+      <td><strong>API ← פלאגין</strong></td>
+      <td>HTML מוכן + metadata (כותרת, slug, תיאור)</td>
+      <td><code>JSON { html, meta }</code></td>
+    </tr>
+    <tr>
+      <td><strong>פלאגין ← וורדפרס</strong></td>
+      <td>יצירת/עדכון דף</td>
+      <td><code>WP REST API</code></td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  SUENOHOST × QUIXALE — מרץ 2026
+</div>
+
+</body>
+</html>
